@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+    database:
+        image: postgres:12.2-alpine
+        ports:
+            - '5432:5432'
+        networks:
+            default:
+                aliases:
+                    - databaes
+        environment:
+            POSTGRES_DB: testdb
+            POSTGRES_USER: dbUser
+            POSTGRES_PASSWORD: secretDbPassword
+        volumes:
+            - type: bind
+              source: ./database/initial.sql
+              target: /docker-entrypoint-initdb.d/init_db.sql
+              read_only: true
+
+networks:
+    default:
+        name: liquibase-demo
+        driver: bridge
