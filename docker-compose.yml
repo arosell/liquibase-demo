@@ -18,6 +18,18 @@ services:
               source: ./database/initial.sql
               target: /docker-entrypoint-initdb.d/init_db.sql
               read_only: true
+    initialize:
+        build: maven
+        image: liquibase_maven:0.0.1
+        working_dir: /liquibase/changelog
+        command: liquibase:update
+        depends_on:
+            - database
+        volumes:
+            - type: bind
+              source: ./liquibase
+              target: /liquibase/changelog
+              read_only: false
 
 networks:
     default:
